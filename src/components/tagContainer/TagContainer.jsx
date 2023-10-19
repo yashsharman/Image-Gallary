@@ -1,9 +1,21 @@
-import { Box } from "@mui/material"
+import { Box } from "@mui/material";
 
-function TagContainer({tagName}) {
+function TagContainer({ tagName, setSearchKeyword,setTriggerPopup }) {
   return (
-    <Box bgcolor={"gainsboro"} py={1} px={1.5} width={"fit-content"} sx={{cursor:"pointer", borderRadius:".25rem"}}>{tagName}</Box>
-  )
+    <Box
+      onClick={() => {
+        setTriggerPopup(false)
+        setSearchKeyword(tagName);
+      }}
+      bgcolor={"gainsboro"}
+      py={1}
+      px={1.5}
+      width={"fit-content"}
+      sx={{ cursor: "pointer", borderRadius: ".25rem" }}
+    >
+      {tagName}
+    </Box>
+  );
 }
 
-export default TagContainer
+export default TagContainer;

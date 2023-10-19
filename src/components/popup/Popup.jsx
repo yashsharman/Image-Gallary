@@ -3,8 +3,8 @@ import { Box, Card, Container, Typography } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import TagContainer from "../tagContainer/TagContainer";
-function Popup({ triggered, imgObj, setTriggerPopup }) {
-  console.log(imgObj);
+
+function Popup({ triggered, imgObj, setTriggerPopup, setSearchKeyword }) {
   const { likes, downloads, user, urls, tags } = imgObj;
   return triggered ? (
     <Box
@@ -35,7 +35,7 @@ function Popup({ triggered, imgObj, setTriggerPopup }) {
             position: "relative",
             overflow: "visible",
             minWidth: "30rem",
-            bgcolor:"black"
+            bgcolor: "black",
           }}
         >
           <img
@@ -67,7 +67,11 @@ function Popup({ triggered, imgObj, setTriggerPopup }) {
                 <Typography variant="h6">
                   {user.first_name} {user.last_name}
                 </Typography>
-                <Typography fontSize={"small"} color={"gray"}>
+                <Typography
+                  fontSize={"small"}
+                  color={"gray"}
+                  textAlign={"left"}
+                >
                   @{user.username}
                 </Typography>
               </Box>
@@ -81,7 +85,12 @@ function Popup({ triggered, imgObj, setTriggerPopup }) {
             </Box>
           </Box>
           <Box p={1} bgcolor={"white"} width={"100%"}>
-            <Typography color="initial" variant="h6" fontWeight={"bold"} textAlign={"left"}>
+            <Typography
+              color="initial"
+              variant="h6"
+              fontWeight={"bold"}
+              textAlign={"left"}
+            >
               Related Tags
             </Typography>
             <Box
@@ -93,7 +102,13 @@ function Popup({ triggered, imgObj, setTriggerPopup }) {
               width={"100%"}
             >
               {tags.map((obj) => {
-                return <TagContainer tagName={obj.title} />;
+                return (
+                  <TagContainer
+                    tagName={obj.title}
+                    setSearchKeyword={setSearchKeyword}
+                    setTriggerPopup={setTriggerPopup}
+                  />
+                );
               })}
             </Box>
           </Box>
@@ -104,9 +119,9 @@ function Popup({ triggered, imgObj, setTriggerPopup }) {
               right: "-.5rem",
               zIndex: "2",
               color: "white",
-              cursor:"pointer"
+              cursor: "pointer",
             }}
-            onClick={()=>setTriggerPopup(false)}
+            onClick={() => setTriggerPopup(false)}
           />
         </Card>
       </Container>

@@ -12,7 +12,7 @@ const clintId = "Bh0LzJxKZe_w06YmzZi-O42Vcktkk8F5zM2GCK_R9NI";
 let timeoutId;
 function App() {
   const [imgArry, setImgArry] = useState([]);
-  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState();
   const [clickedImgInfo, setClickedImgInfo] = useState({});
   const [triggerPopup, setTriggerPopup] = useState(false);
 
@@ -27,15 +27,10 @@ function App() {
     getRandomImg();
   }, []);
 
-
-  //*This code will only run when searchKeyword State changes...
+  //*This code will only run when searchKeyword State changes...  
   useEffect(() => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      searchImg();
-    }, 1000);
+    searchImg();
   }, [searchKeyword]);
-
 
   // *To get images when user enters keyword...
   const searchImg = async () => {
@@ -45,22 +40,22 @@ function App() {
         `https://api.unsplash.com/search/collections?page=1&query=${searchKeyword}&client_id=${clintId}`
       );
       const data = await response.json();
-      data.results.map((x) => {
-        x.preview_photos.map((imgs) => seachImgArr.push(imgs));
+      console.log(data);
+      data.results.forEach((imgObjArry) => {
+        imgObjArry.preview_photos.forEach((imgs) => seachImgArr.push(imgs));
       });
 
       setImgArry(seachImgArr);
     }
   };
-  
-
 
   //* Just saves the target value into a state variable...
   const handleSearchInput = (e) => {
-    setSearchKeyword(e.target.value);
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      setSearchKeyword(e.target.value);
+    }, 1000);
   };
-
-
 
   //* This runs when user clickes on the image card...
   const handlePopup = async (id) => {
@@ -72,17 +67,21 @@ function App() {
     setTriggerPopup(true);
   };
 
-  
   return (
     <div className="App">
       <CssBaseline />
       <Navbar handleSearchInput={handleSearchInput} />
       <HeroSearch handleSearchInput={handleSearchInput} />
-      <CardContainer handlePopup={handlePopup} imgArry={imgArry} />
+      <CardContainer
+        handlePopup={handlePopup}
+        imgArry={imgArry}
+        searchKeyword={searchKeyword}
+      />
       <Popup
         triggered={triggerPopup}
         setTriggerPopup={setTriggerPopup}
         imgObj={clickedImgInfo}
+        setSearchKeyword={setSearchKeyword}
       />
     </div>
   );
