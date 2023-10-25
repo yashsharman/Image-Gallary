@@ -1,18 +1,19 @@
 import "./App.css";
 import { CssBaseline } from "@mui/material";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import Popup from "./components/popup/Popup";
 import CardContainer from "./components/cardContainer/CardContainer";
 import Navbar from "./components/navbar/Navbar";
 import HeroSearch from "./components/heroSearch/HeroSearch";
 
-const clintId = "Bh0LzJxKZe_w06YmzZi-O42Vcktkk8F5zM2GCK_R9NI";
+const clintId = "yZK9c3iGUWomoERcRROzBbIzsCvNDK_9SB9tEWvIQ9U";
 
 let timeoutId;
+
 function App() {
   const [imgArry, setImgArry] = useState([]);
-  const [searchKeyword, setSearchKeyword] = useState();
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [clickedImgInfo, setClickedImgInfo] = useState({});
   const [triggerPopup, setTriggerPopup] = useState(false);
 
@@ -27,7 +28,7 @@ function App() {
     getRandomImg();
   }, []);
 
-  //*This code will only run when searchKeyword State changes...  
+  //*This code will only run when searchKeyword State changes...
   useEffect(() => {
     searchImg();
   }, [searchKeyword]);
@@ -40,7 +41,6 @@ function App() {
         `https://api.unsplash.com/search/collections?page=1&query=${searchKeyword}&client_id=${clintId}`
       );
       const data = await response.json();
-      console.log(data);
       data.results.forEach((imgObjArry) => {
         imgObjArry.preview_photos.forEach((imgs) => seachImgArr.push(imgs));
       });
@@ -57,12 +57,17 @@ function App() {
     }, 1000);
   };
 
-  //* This runs when user clickes on the image card...
-  const handlePopup = async (id) => {
+  const getImageInfo = async (id) => {
     const response = await fetch(
       `https://api.unsplash.com/photos/${id}?client_id=${clintId}`
     );
     const data = await response.json();
+    return data;
+  };
+
+  //* This runs when user clickes on the image card...
+  const handlePopup = async (id) => {
+    let data = await getImageInfo(id);
     setClickedImgInfo(data);
     setTriggerPopup(true);
   };
@@ -76,6 +81,7 @@ function App() {
         handlePopup={handlePopup}
         imgArry={imgArry}
         searchKeyword={searchKeyword}
+        getImageInfo={getImageInfo}
       />
       <Popup
         triggered={triggerPopup}

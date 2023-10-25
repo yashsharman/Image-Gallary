@@ -1,11 +1,21 @@
 import React from "react";
-import { Box, Card, Container, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Typography } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import DownloadIcon from '@mui/icons-material/Download';
 import TagContainer from "../tagContainer/TagContainer";
 
 function Popup({ triggered, imgObj, setTriggerPopup, setSearchKeyword }) {
   const { likes, downloads, user, urls, tags } = imgObj;
+
+  const handleDownload = (imageUrl) => {
+    console.log(imageUrl)
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = true;
+    link.click();
+  };
+
   return triggered ? (
     <Box
       display={"flex"}
@@ -38,6 +48,8 @@ function Popup({ triggered, imgObj, setTriggerPopup, setSearchKeyword }) {
             bgcolor: "black",
           }}
         >
+          <Button onClick={()=>handleDownload(imgObj.links?.download)} variant="contained" color="success" startIcon={<DownloadIcon/>} sx={{position:"absolute", top:"1rem", left:"1rem"}}>Download</Button>
+
           <img
             src={urls.regular}
             alt="regularimage"

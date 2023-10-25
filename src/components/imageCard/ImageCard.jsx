@@ -28,6 +28,7 @@ function ImageCard({img, handlePopup}) {
           pt={1}
           gap={2}
         >
+
           <Box
             display={"flex"}
             alignItems={"center"}
